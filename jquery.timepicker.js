@@ -104,7 +104,7 @@
 			}
 
 			// check if list needs to be rendered
-			if (!list || list.length === 0 || typeof settings.durationTime === 'function') {
+			if (!list || list.length === 0 || typeof settings.durationTime === 'function' || typeof settings.showDuration === 'function') {
 				_render(self);
 				list = self.data('timepicker-list');
 			}
@@ -456,7 +456,7 @@
 			wrapped_list.addClass(settings.className);
 		}
 
-		if ((settings.minTime !== null || settings.durationTime !== null) && settings.showDuration) {
+		if (settings.showDuration && (settings.minTime || settings.durationTime || typeof settings.showDuration === 'function')) {
 			var stepval = typeof settings.step == 'function' ? 'function' : settings.step;
 			wrapped_list.addClass('ui-timepicker-with-duration');
 			wrapped_list.addClass('ui-timepicker-step-'+settings.step);
@@ -505,8 +505,16 @@
 				row.text(timeString);
 			}
 
-			if ((settings.minTime !== null || settings.durationTime !== null) && settings.showDuration) {
-				var durationString = _int2duration(i - durStart, settings.step);
+			if(settings.showDuration){
+				var durationString;
+
+				if(typeof settings.showDuration === 'function'){
+					durationString = settings.showDuration(i);
+				}
+				else if ((settings.minTime !== null || settings.durationTime !== null)) {
+					durationString = _int2duration(i - durStart, settings.step);
+				}
+
 				if (settings.useSelect) {
 					row.text(row.text()+' ('+durationString+')');
 				} else {
