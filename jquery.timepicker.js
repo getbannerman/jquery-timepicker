@@ -6,11 +6,11 @@
 
 
 (function (factory) {
-    if (typeof exports === "object" && exports &&
-        typeof module === "object" && module && module.exports === exports) {
-        // Browserify. Attach to jQuery module.
-        factory(require("jquery"));
-    } else if (typeof define === 'function' && define.amd) {
+	if (typeof exports === "object" && exports &&
+		typeof module === "object" && module && module.exports === exports) {
+		// Browserify. Attach to jQuery module.
+		factory(require("jquery"));
+	} else if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(['jquery'], factory);
 	} else {
@@ -61,7 +61,7 @@
 				} else {
 					self.prop('autocomplete', 'off');
 					if (settings.showOn) {
-						for (i in settings.showOn) {
+						for (var i in settings.showOn) {
 							self.on(settings.showOn[i]+'.timepicker', methods.show);
 						}
 					}
@@ -365,16 +365,16 @@
 		if (settings.scrollDefault == 'now') {
 			settings.scrollDefault = function() {
 				return settings.roundingFunction(_time2int(new Date()), settings);
-			}
+			};
 		} else if (settings.scrollDefault && typeof settings.scrollDefault != 'function') {
 			var val = settings.scrollDefault;
 			settings.scrollDefault = function() {
 				return settings.roundingFunction(_time2int(val), settings);
-			}
+			};
 		} else if (settings.minTime) {
 			settings.scrollDefault = function() {
 				return settings.roundingFunction(settings.minTime, settings);
-			}
+			};
 		}
 
 		if ($.type(settings.timeFormat) === "string" && settings.timeFormat.match(/[gh]/)) {
@@ -489,7 +489,7 @@
 		if (typeof stepFunc != 'function') {
 			stepFunc = function() {
 				return settings.step;
-			}
+			};
 		}
 
 		for (var i=start, j=0; i <= end; j++, i += stepFunc(j)*60) {
