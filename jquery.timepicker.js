@@ -1,5 +1,5 @@
 /*!
- * jquery-timepicker v1.8.2 - A jQuery timepicker plugin inspired by Google Calendar. It supports both mouse and keyboard navigation.
+ * jquery-timepicker v1.8.6 - A jQuery timepicker plugin inspired by Google Calendar. It supports both mouse and keyboard navigation.
  * Copyright (c) 2015 Jon Thornton - http://jonthornton.github.com/jquery-timepicker/
  * License: MIT
  */
@@ -69,7 +69,7 @@
 					self.on('keydown.timepicker', _keydownhandler);
 					self.on('keyup.timepicker', _keyuphandler);
 					if (settings.disableTextInput) {
-						self.on('keypress.timepicker', function(e) { e.preventDefault(); });
+						self.on('keydown.timepicker', function(e) { e.preventDefault(); });
 					}
 
 					_formatValue.call(self.get(0));
@@ -158,8 +158,9 @@
 			var selected = list.find('.ui-timepicker-selected');
 
 			if (!selected.length) {
-				if (_getTimeValue(self)) {
-					selected = _findRow(self, list, _time2int(_getTimeValue(self)));
+				var timeInt = _time2int(_getTimeValue(self));
+				if (timeInt !== null) {
+					selected = _findRow(self, list, timeInt);
 				} else if (settings.scrollDefault) {
 					selected = _findRow(self, list, settings.scrollDefault());
 				}
@@ -274,10 +275,10 @@
 			}
 
 			if (!relative_date) {
-				relative_date = new Date();
+				relative_date = _baseDate;
 			}
 
-			// construct a Date with today's date, and offset's time
+			// construct a Date from relative date, and offset's time
 			var time = new Date(relative_date);
 			time.setHours(offset / 3600);
 			time.setMinutes(offset % 3600 / 60);
@@ -1053,7 +1054,7 @@
 
 				case 'H':
 					hour = time.getHours();
-					if (seconds === _ONE_DAY) hour = 24;
+					if (seconds === _ONE_DAY) hour = settings.show2400 ? 24 : 0;
 					output += (hour > 9) ? hour : '0'+hour;
 					break;
 
@@ -1160,20 +1161,18 @@
 	};
 	// Global defaults
 	$.fn.timepicker.defaults = {
+		appendTo: 'body',
 		className: null,
-		minTime: null,
-		maxTime: null,
-		durationTime: null,
-		step: 30,
-		showDuration: false,
-		showOnFocus: true,
-		showOn: ['click', 'focus'],
-		timeFormat: 'g:ia',
-		scrollDefault: null,
-		selectOnBlur: false,
+		closeOnWindowScroll: false,
 		disableTextInput: false,
+		disableTimeRanges: [],
 		disableTouchKeyboard: false,
+		durationTime: null,
 		forceRoundTime: false,
+		maxTime: null,
+		minTime: null,
+		noneOption: false,
+		orientation: 'l',
 		roundingFunction: function(seconds, settings) {
 			if (seconds === null) {
 				return null;
@@ -1191,13 +1190,16 @@
 				return seconds;
 			}
 		},
-		appendTo: 'body',
-		orientation: 'l',
-		disableTimeRanges: [],
-		closeOnWindowScroll: false,
-		typeaheadHighlight: true,
-		noneOption: false,
+		scrollDefault: null,
+		selectOnBlur: false,
 		show2400: false,
-		stopScrollPropagation: false
+		showDuration: false,
+		showOn: ['click', 'focus'],
+		showOnFocus: true,
+		step: 30,
+		stopScrollPropagation: false,
+		timeFormat: 'g:ia',
+		typeaheadHighlight: true,
+		useSelect: false
 	};
 }));

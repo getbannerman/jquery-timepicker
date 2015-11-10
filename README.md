@@ -154,7 +154,7 @@ Get the time as an integer, expressed as seconds from 12am.
 	```
 
 - **getTime**  
-Get the time using a Javascript Date object, relative to a Date object (default: today).
+Get the time using a Javascript Date object, relative to a Date object (default: Jan 1, 1970).
 
 	```javascript
 	$('#getTimeExample').timepicker('getTime');
@@ -275,6 +275,8 @@ Development guidelines
 
 1. Install dependencies (jquery + grunt) `npm install`
 2. For sanity checks and minification run `grunt`, or just `grunt lint` to have the code linted
+ 
+jquery-timepicker follows [semantic versioning](http://semver.org/).
 
 - - -
 
